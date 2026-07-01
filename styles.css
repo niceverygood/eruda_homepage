@@ -912,6 +912,12 @@ section {
   box-shadow: 0 22px 35px rgba(20, 33, 29, 0.14);
 }
 
+.product-price {
+  margin: 16px 0 0;
+  font-size: 20px;
+  font-weight: 750;
+}
+
 .contents {
   position: relative;
   overflow: hidden;
