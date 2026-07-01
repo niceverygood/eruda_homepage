@@ -36,7 +36,8 @@ module.exports = async (req, res) => {
     }
 
     const orderNumber = `IRUDA${Date.now()}${crypto.randomBytes(3).toString("hex")}`.toUpperCase();
-    const resolvedReturnUrl = returnUrl || `${req.headers.origin || ""}/api/payment/approve`;
+    const origin = req.headers.origin || (req.headers.host ? `https://${req.headers.host}` : "");
+    const resolvedReturnUrl = returnUrl || `${origin}/api/payment/approve`;
 
     const orderRes = await pool.query(
       `insert into orders
