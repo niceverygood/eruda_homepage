@@ -294,6 +294,7 @@
                 <li>초기 연결 집중 캠페인에 적합</li>
               </ul>
               <img class="product-visual" src="assets/optimized/product-saving-premium.jpg" alt="" loading="lazy" />
+              <button class="button button--primary button--small product-buy" type="button" data-product-id="saving-premium" data-product-name="보험료절감 PREMIUM">구매하기</button>
             </article>
             <article class="product-card" data-category="silver condition">
               <span class="badge badge--warm">PREMIUM</span>
@@ -304,6 +305,7 @@
                 <li>전담 CS 재배정 지원 포함</li>
               </ul>
               <img class="product-visual" src="assets/optimized/product-silver-premium.jpg" alt="" loading="lazy" />
+              <button class="button button--primary button--small product-buy" type="button" data-product-id="silver-premium" data-product-name="실버 PREMIUM">구매하기</button>
             </article>
             <article class="product-card" data-category="saving income">
               <span class="badge badge--dark">MAX</span>
@@ -314,6 +316,7 @@
                 <li>팀 단위 배분에 최적화</li>
               </ul>
               <img class="product-visual" src="assets/optimized/product-saving-max.jpg" alt="" loading="lazy" />
+              <button class="button button--primary button--small product-buy" type="button" data-product-id="saving-max" data-product-name="보험료절감 MAX">구매하기</button>
             </article>
             <article class="product-card" data-category="silver condition">
               <span class="badge">MAX</span>
@@ -324,10 +327,29 @@
                 <li>세분 타겟 옵션 선택 가능</li>
               </ul>
               <img class="product-visual" src="assets/optimized/product-silver-max.jpg" alt="" loading="lazy" />
+              <button class="button button--primary button--small product-buy" type="button" data-product-id="silver-max" data-product-name="실버 MAX">구매하기</button>
             </article>
           </div>
         </div>
       </section>
+
+      <div class="payment-modal" data-payment-modal hidden>
+        <div class="payment-modal__backdrop" data-payment-modal-close></div>
+        <div class="payment-modal__panel" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title">
+          <button class="icon-button payment-modal__close" type="button" aria-label="닫기" data-payment-modal-close>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+          <h3 id="payment-modal-title">구매자 정보 입력</h3>
+          <p class="payment-modal__product" data-payment-modal-product></p>
+          <form data-payment-form>
+            <label>이름<input type="text" name="customerName" required /></label>
+            <label>이메일<input type="email" name="customerEmail" required /></label>
+            <label>휴대폰번호<input type="tel" name="customerMobilePhone" placeholder="01012345678" required /></label>
+            <p class="payment-modal__error" data-payment-error hidden></p>
+            <button class="button button--primary" type="submit" data-payment-submit>결제 진행</button>
+          </form>
+        </div>
+      </div>
 
       <section class="contents section-observe" aria-labelledby="contents-title">
         <div class="container contents__layout">

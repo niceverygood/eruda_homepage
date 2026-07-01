@@ -108,6 +108,115 @@ document.querySelectorAll(".chip[data-filter]").forEach((chip) => {
   });
 });
 
+const paymentModal = document.querySelector("[data-payment-modal]");
+const paymentModalProduct = document.querySelector("[data-payment-modal-product]");
+const paymentForm = document.querySelector("[data-payment-form]");
+const paymentError = document.querySelector("[data-payment-error]");
+const paymentSubmit = document.querySelector("[data-payment-submit]");
+
+let selectedProductId = null;
+let seedPaySdkLoaded = false;
+
+const loadSeedPaySdk = () =>
+  new Promise((resolve, reject) => {
+    if (seedPaySdkLoaded && window.SeedPay) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://js.seedpayments.co.kr/v1/seedpay.js";
+    script.onload = () => {
+      seedPaySdkLoaded = true;
+      resolve();
+    };
+    script.onerror = () => reject(new Error("SEEDPAY_SDK_LOAD_FAILED"));
+    document.head.appendChild(script);
+  });
+
+const openPaymentModal = (productId, productName) => {
+  selectedProductId = productId;
+  if (paymentModalProduct) paymentModalProduct.textContent = productName;
+  paymentError?.setAttribute("hidden", "");
+  paymentForm?.reset();
+  paymentModal?.removeAttribute("hidden");
+};
+
+const closePaymentModal = () => {
+  selectedProductId = null;
+  paymentModal?.setAttribute("hidden", "");
+};
+
+document.querySelectorAll(".product-buy").forEach((button) => {
+  button.addEventListener("click", () => {
+    openPaymentModal(button.dataset.productId, button.dataset.productName || "");
+  });
+});
+
+document.querySelectorAll("[data-payment-modal-close]").forEach((el) => {
+  el.addEventListener("click", closePaymentModal);
+});
+
+paymentForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!selectedProductId) return;
+
+  paymentError?.setAttribute("hidden", "");
+  if (paymentSubmit) {
+    paymentSubmit.disabled = true;
+    paymentSubmit.textContent = "처리 중...";
+  }
+
+  const formData = new FormData(paymentForm);
+
+  try {
+    const requestRes = await fetch("/api/payment/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productId: selectedProductId,
+        customerName: formData.get("customerName"),
+        customerEmail: formData.get("customerEmail"),
+        customerMobilePhone: formData.get("customerMobilePhone"),
+      }),
+    });
+
+    const contentType = requestRes.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error("결제 서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.");
+    }
+
+    const payload = await requestRes.json();
+    if (!requestRes.ok) {
+      throw new Error(payload.message || payload.error || "결제 요청에 실패했습니다.");
+    }
+
+    await loadSeedPaySdk();
+
+    if (!window.SeedPay || typeof window.SeedPay.requestPayment !== "function") {
+      throw new Error("SeedPay SDK를 불러오지 못했습니다.");
+    }
+
+    window.SeedPay.requestPayment(payload);
+  } catch (error) {
+    if (paymentError) {
+      paymentError.textContent = error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+      paymentError.removeAttribute("hidden");
+    }
+  } finally {
+    if (paymentSubmit) {
+      paymentSubmit.disabled = false;
+      paymentSubmit.textContent = "결제 진행";
+    }
+  }
+});
+
+const paymentStatus = new URLSearchParams(window.location.search).get("payment");
+if (paymentStatus === "success") {
+  window.alert("결제가 완료되었습니다.");
+} else if (paymentStatus === "fail") {
+  window.alert("결제에 실패했습니다. 다시 시도해주세요.");
+}
+
 const faqList = document.querySelector("[data-faq-list]");
 
 faqList?.addEventListener("toggle", (event) => {
