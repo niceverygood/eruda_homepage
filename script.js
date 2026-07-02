@@ -115,22 +115,39 @@ const paymentError = document.querySelector("[data-payment-error]");
 const paymentSubmit = document.querySelector("[data-payment-submit]");
 
 let selectedProductId = null;
-let seedPaySdkLoaded = false;
+let seedPayBootstrapInjected = false;
 
+// seedpay.js 는 부트스트랩 스크립트라서, 로드 완료 후에도 코어 SDK를 비동기로
+// 한 번 더 받아와야 window.SeedPay 가 생긴다. 주입 후 폴링으로 준비될 때까지 대기.
 const loadSeedPaySdk = () =>
   new Promise((resolve, reject) => {
-    if (seedPaySdkLoaded && window.SeedPay) {
+    const ready = () => window.SeedPay && typeof window.SeedPay.requestPayment === "function";
+
+    if (ready()) {
       resolve();
       return;
     }
-    const script = document.createElement("script");
-    script.src = "https://js.seedpayments.co.kr/v1/seedpay.js";
-    script.onload = () => {
-      seedPaySdkLoaded = true;
-      resolve();
-    };
-    script.onerror = () => reject(new Error("SEEDPAY_SDK_LOAD_FAILED"));
-    document.head.appendChild(script);
+
+    if (!seedPayBootstrapInjected) {
+      seedPayBootstrapInjected = true;
+      const script = document.createElement("script");
+      script.src = "https://js.seedpayments.co.kr/v1/seedpay.js";
+      script.onerror = () => {
+        seedPayBootstrapInjected = false;
+      };
+      document.head.appendChild(script);
+    }
+
+    const startedAt = Date.now();
+    const timer = setInterval(() => {
+      if (ready()) {
+        clearInterval(timer);
+        resolve();
+      } else if (Date.now() - startedAt > 10000) {
+        clearInterval(timer);
+        reject(new Error("결제 모듈 로딩에 실패했습니다. 새로고침 후 다시 시도해주세요."));
+      }
+    }, 100);
   });
 
 const openPaymentModal = (productId, productName) => {
