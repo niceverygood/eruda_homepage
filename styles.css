@@ -864,6 +864,8 @@ section {
 
 .product-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 430px;
   overflow: hidden;
   padding: 24px;
@@ -900,10 +902,9 @@ section {
 }
 
 .product-visual {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  width: 138px;
+  align-self: flex-end;
+  margin-top: auto;
+  width: 118px;
   aspect-ratio: 1;
   border: 1px solid rgba(37, 99, 235, 0.14);
   border-radius: 24px;
@@ -913,7 +914,8 @@ section {
 }
 
 .product-price {
-  margin: 16px 0 0;
+  /* 이미지(우측 정렬) 옆 빈 공간으로 가격을 끌어올려 카드 높이를 아낀다 */
+  margin: -32px 0 0;
   font-size: 20px;
   font-weight: 750;
 }
