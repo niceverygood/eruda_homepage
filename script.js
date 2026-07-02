@@ -114,6 +114,94 @@ const paymentForm = document.querySelector("[data-payment-form]");
 const paymentError = document.querySelector("[data-payment-error]");
 const paymentSubmit = document.querySelector("[data-payment-submit]");
 
+const productInfo = {
+  "analysis-general": {
+    badge: "일반",
+    name: "보장 분석 리모델링 (일반)",
+    price: "90,000원",
+    desc: "본인 보장 내역이 궁금해 직접 분석을 신청한 20~50대 고객 DB입니다. 가입 내역 점검 니즈가 확인된 상태라 첫 통화에서 상담 흐름을 잡기 쉽습니다.",
+    fields: ["이름", "연락처", "나이/성별", "거주 지역", "신청 경로", "관심 항목", "상담 가능 시간"],
+    script:
+      "안녕하세요 고객님, 보장 분석 신청해 주셔서 연락드린 ○○○ 설계사입니다.\n남겨주신 내용 보니까 현재 가입하신 보험 보장이 잘 되어 있는지 궁금하셔서 신청 주셨더라고요.\n지금 갖고 계신 증권 기준으로 과한 부분은 줄이고 부족한 보장은 채우는 방향으로 정리해서 안내드릴게요. 통화 5분 정도 괜찮으실까요?",
+    as: "부재, 오기입, 중복, 가망 없음 등 검수 기준 충족 시 재배정 지원",
+  },
+  "analysis-silver": {
+    badge: "실버",
+    name: "보장 분석 리모델링 (실버)",
+    price: "80,000원",
+    desc: "부모님 또는 본인의 노후 보장을 점검하고 싶어 신청한 고령자 타겟 DB입니다. 건강 상태별 리모델링 포인트가 함께 제공돼 상담 준비가 수월합니다.",
+    fields: ["이름", "연락처", "나이/성별", "거주 지역", "신청 경로", "건강 관심사", "상담 가능 시간"],
+    script:
+      "안녕하세요 고객님, 보장 점검 신청 주셔서 연락드린 ○○○ 설계사입니다.\n요즘 나이 들수록 병원비 걱정이 크시잖아요. 신청서에 남겨주신 내용 기준으로, 지금 갖고 계신 보험에서 실제로 보장받을 수 있는 항목이 어디까지인지 알기 쉽게 정리해 드리려고 해요.\n어렵게 설명 안 드리고 꼭 필요한 것만 짚어드릴게요. 잠깐 통화 괜찮으세요?",
+    as: "부재, 오기입, 중복, 가망 없음 등 검수 기준 충족 시 재배정 지원 (전담 CS 포함)",
+  },
+  "replan-silver": {
+    badge: "실버",
+    name: "보험료 플랜 재설계 (실버)",
+    price: "70,000원",
+    desc: "매달 나가는 보험료가 부담돼 조정을 원하는 실버 고객 DB입니다. 보험료 절감이라는 명확한 니즈가 있어 상담 목적이 뚜렷하고, 월별 재구매 플랜 구성에 유리합니다.",
+    fields: ["이름", "연락처", "나이/성별", "거주 지역", "월 보험료 수준", "신청 경로", "상담 가능 시간"],
+    script:
+      "안녕하세요 고객님, 보험료 조정 상담 신청해 주셔서 연락드린 ○○○ 설계사입니다.\n매달 내시는 보험료가 부담되신다고 남겨주셨는데요, 보장은 최대한 유지하면서 보험료만 줄이는 방법이 있는지 지금 내역 기준으로 확인해 드릴게요.\n증권만 있으시면 5분 안에 비교해서 알려드릴 수 있습니다. 지금 통화 괜찮으실까요?",
+    as: "부재, 오기입, 중복, 가망 없음 등 검수 기준 충족 시 재배정 지원",
+  },
+  "replan-general": {
+    badge: "일반",
+    name: "보험료 플랜 재설계 (일반)",
+    price: "80,000원",
+    desc: "보험료 재설계를 원하는 일반 고객 DB로, 대량 캠페인 운영과 팀 단위 배분에 최적화된 구성입니다. 유입 채널별 품질 체크를 거쳐 공급됩니다.",
+    fields: ["이름", "연락처", "나이/성별", "거주 지역", "유입 채널", "관심 항목", "상담 가능 시간"],
+    script:
+      "안녕하세요 고객님, 보험료 재설계 신청 주셔서 연락드린 ○○○ 설계사입니다.\n지금 내고 계신 보험료가 적정한지 궁금하셔서 신청 주신 걸로 확인했는데요, 같은 보장 기준으로 보험료를 비교해 보면 조정 여지가 있는 경우가 많습니다.\n부담 없이 현재 상태 점검부터 도와드릴게요. 잠시 통화 가능하실까요?",
+    as: "부재, 오기입, 중복, 가망 없음 등 검수 기준 충족 시 재배정 지원",
+  },
+};
+
+const infoStep = document.querySelector('[data-payment-step="info"]');
+const formStep = document.querySelector('[data-payment-step="form"]');
+const infoBadge = document.querySelector("[data-info-badge]");
+const infoTitle = document.querySelector("[data-info-title]");
+const infoPrice = document.querySelector("[data-info-price]");
+const infoDesc = document.querySelector("[data-info-desc]");
+const infoFields = document.querySelector("[data-info-fields]");
+const infoScript = document.querySelector("[data-info-script]");
+const infoAs = document.querySelector("[data-info-as]");
+
+const showPaymentStep = (step) => {
+  infoStep?.toggleAttribute("hidden", step !== "info");
+  formStep?.toggleAttribute("hidden", step !== "form");
+  paymentModal?.querySelector(".payment-modal__panel")?.scrollTo({ top: 0 });
+};
+
+const fillProductInfo = (productId, fallbackName) => {
+  const info = productInfo[productId];
+  if (infoBadge) infoBadge.textContent = info?.badge ?? "DB";
+  if (infoTitle) infoTitle.textContent = info?.name ?? fallbackName;
+  if (infoPrice) infoPrice.textContent = info?.price ?? "";
+  if (infoDesc) infoDesc.textContent = info?.desc ?? "";
+  if (infoAs) infoAs.textContent = info?.as ?? "";
+
+  if (infoFields) {
+    infoFields.replaceChildren(
+      ...(info?.fields ?? []).map((field) => {
+        const li = document.createElement("li");
+        li.textContent = field;
+        return li;
+      }),
+    );
+  }
+
+  if (infoScript) {
+    infoScript.replaceChildren(
+      ...(info?.script ?? "").split("\n").map((line) => {
+        const p = document.createElement("p");
+        p.textContent = line;
+        return p;
+      }),
+    );
+  }
+};
+
 let selectedProductId = null;
 let seedPayBootstrapInjected = false;
 
@@ -155,6 +243,8 @@ const openPaymentModal = (productId, productName) => {
   if (paymentModalProduct) paymentModalProduct.textContent = productName;
   paymentError?.setAttribute("hidden", "");
   paymentForm?.reset();
+  fillProductInfo(productId, productName);
+  showPaymentStep("info");
   paymentModal?.removeAttribute("hidden");
 };
 
@@ -171,6 +261,14 @@ document.querySelectorAll(".product-buy").forEach((button) => {
 
 document.querySelectorAll("[data-payment-modal-close]").forEach((el) => {
   el.addEventListener("click", closePaymentModal);
+});
+
+document.querySelector("[data-payment-next]")?.addEventListener("click", () => {
+  showPaymentStep("form");
+});
+
+document.querySelector("[data-payment-back]")?.addEventListener("click", () => {
+  showPaymentStep("info");
 });
 
 paymentForm?.addEventListener("submit", async (event) => {
