@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const { getPool } = require("./_db");
+const { notifyPaid } = require("./_notify");
 
 // SeedPay 결제창(SDK)이 결제 완료 후 돌아오는 returnUrl.
 // 여기서 씨드페이 승인 API(/payment/v1/approval)를 서버 사이드로 호출해 최종 승인 처리한다.
@@ -33,7 +34,7 @@ module.exports = async (req, res) => {
 
   try {
     const orderRes = await pool.query(
-      "select id, amount, status from orders where order_number = $1",
+      "select id, amount, status, buyer_name, buyer_phone, product_name_snapshot from orders where order_number = $1",
       [orderNumber],
     );
     const order = orderRes.rows[0];
@@ -87,6 +88,16 @@ module.exports = async (req, res) => {
     ]);
 
     if (approved) {
+      if (order.status !== "paid") {
+        // 웹훅과 중복 발송 방지: 이전 상태가 paid가 아닐 때만 문자 알림
+        await notifyPaid({
+          orderNumber,
+          productName: order.product_name_snapshot,
+          amount: order.amount,
+          buyerName: order.buyer_name,
+          buyerPhone: order.buyer_phone,
+        });
+      }
       res.redirect(302, `/?payment=success&orderId=${encodeURIComponent(orderNumber)}`);
     } else {
       res.redirect(302, `/?payment=fail&reason=${encodeURIComponent(result.resultMsg || result.resultCd)}`);

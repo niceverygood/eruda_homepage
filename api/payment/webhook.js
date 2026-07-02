@@ -1,4 +1,5 @@
 const { getPool } = require("./_db");
+const { notifyPaid } = require("./_notify");
 
 // 씨드페이 결제결과 비동기 통보(webhook) 수신 엔드포인트.
 // 등록 경로: 씨드페이 가맹점 관리자 → 가맹점정보 → 결제환경 설정 → 결제결과 통보관리
@@ -24,7 +25,10 @@ module.exports = async (req, res) => {
   const pool = getPool();
 
   try {
-    const orderRes = await pool.query("select id from orders where order_number = $1", [orderNumber]);
+    const orderRes = await pool.query(
+      "select id, status, amount, buyer_name, buyer_phone, product_name_snapshot from orders where order_number = $1",
+      [orderNumber],
+    );
     const order = orderRes.rows[0];
     if (!order) {
       res.status(200).send("OK");
@@ -54,6 +58,16 @@ module.exports = async (req, res) => {
         order.id,
         approved ? "paid" : "failed",
       ]);
+      if (approved && order.status !== "paid") {
+        // 승인 콜백(approve)과 중복 발송 방지: 이전 상태가 paid가 아닐 때만 문자 알림
+        await notifyPaid({
+          orderNumber,
+          productName: order.product_name_snapshot,
+          amount: order.amount,
+          buyerName: order.buyer_name,
+          buyerPhone: order.buyer_phone,
+        });
+      }
     }
   } catch (err) {
     console.error("[seedpay:webhook] error", err);
