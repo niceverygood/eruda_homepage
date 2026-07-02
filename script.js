@@ -325,9 +325,91 @@ paymentForm?.addEventListener("submit", async (event) => {
   }
 });
 
-const paymentStatus = new URLSearchParams(window.location.search).get("payment");
+const successModal = document.querySelector("[data-success-modal]");
+const successOrder = document.querySelector("[data-success-order]");
+const successList = document.querySelector("[data-success-list]");
+
+document.querySelectorAll("[data-success-close]").forEach((el) => {
+  el.addEventListener("click", () => successModal?.setAttribute("hidden", ""));
+});
+
+const formatDuration = (seconds) => {
+  if (!Number.isFinite(seconds)) return "";
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m > 0 ? `${m}분 ${s}초` : `${s}초`;
+};
+
+const renderSummaryCard = (item) => {
+  const card = document.createElement("article");
+  card.className = "summary-card";
+
+  const meta = document.createElement("div");
+  meta.className = "summary-card__meta";
+
+  const needs = document.createElement("span");
+  needs.className = "summary-card__needs";
+  needs.textContent = item.needs_category || "분류중";
+  meta.appendChild(needs);
+
+  const who = document.createElement("span");
+  who.className = "summary-card__who";
+  const duration = formatDuration(item.call_duration);
+  who.textContent = [item.customer_masked_name, duration && `통화 ${duration}`].filter(Boolean).join(" · ");
+  meta.appendChild(who);
+
+  if (item.qa_result === "pass") {
+    const qa = document.createElement("span");
+    qa.className = "summary-card__qa";
+    qa.textContent = "검수 합격";
+    meta.appendChild(qa);
+  }
+
+  const text = document.createElement("p");
+  text.textContent = item.summary;
+
+  card.append(meta, text);
+  return card;
+};
+
+const showSummaryEmpty = (message) => {
+  if (!successList) return;
+  const p = document.createElement("p");
+  p.className = "summary-empty";
+  p.textContent = message;
+  successList.replaceChildren(p);
+};
+
+const openSuccessModal = async (orderId) => {
+  successModal?.removeAttribute("hidden");
+  if (!orderId) {
+    showSummaryEmpty("주문 정보를 확인할 수 없습니다.");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/orders/summaries?orderId=${encodeURIComponent(orderId)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const payload = await res.json();
+
+    if (successOrder) {
+      successOrder.textContent = `${payload.order.productName} · 주문번호 ${payload.order.orderNumber}`;
+    }
+
+    if (!payload.items.length) {
+      showSummaryEmpty("통화 요약이 준비되는 대로 이 화면에서 확인하실 수 있습니다.");
+      return;
+    }
+    successList?.replaceChildren(...payload.items.map(renderSummaryCard));
+  } catch (error) {
+    showSummaryEmpty("통화 요약을 불러오지 못했습니다. 잠시 후 다시 확인해주세요.");
+  }
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const paymentStatus = urlParams.get("payment");
 if (paymentStatus === "success") {
-  window.alert("결제가 완료되었습니다.");
+  openSuccessModal(urlParams.get("orderId"));
 } else if (paymentStatus === "fail") {
   window.alert("결제에 실패했습니다. 다시 시도해주세요.");
 }

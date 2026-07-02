@@ -1616,6 +1616,67 @@ details p {
   margin-top: 24px;
 }
 
+.summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-card {
+  padding: 14px 16px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-soft);
+}
+
+.summary-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.summary-card__needs {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--color-accent-strong);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.summary-card__who {
+  color: var(--color-muted);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.summary-card__qa {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.summary-card p {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.summary-empty {
+  margin: 0;
+  padding: 18px 0;
+  color: var(--color-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
 .payment-modal__back {
   display: block;
   margin: 14px auto 0;

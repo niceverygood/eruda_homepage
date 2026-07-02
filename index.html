@@ -429,6 +429,26 @@
         </div>
       </div>
 
+      <div class="payment-modal" data-success-modal hidden>
+        <div class="payment-modal__backdrop" data-success-close></div>
+        <div class="payment-modal__panel" role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
+          <button class="icon-button payment-modal__close" type="button" aria-label="닫기" data-success-close>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
+          </button>
+          <span class="badge">결제 완료</span>
+          <h3 id="success-modal-title">구매해 주셔서 감사합니다!</h3>
+          <p class="payment-modal__product" data-success-order></p>
+
+          <h4 class="payment-modal__label">AI 통화 요약</h4>
+          <p class="payment-modal__desc">
+            이루다 전산이 상담 통화를 자동 녹취하고 AI가 핵심 내용을 요약합니다. 최근 상담 통화의 AI 요약을 확인해 보세요.
+          </p>
+          <div class="summary-list" data-success-list>
+            <p class="summary-empty">통화 요약을 불러오는 중...</p>
+          </div>
+        </div>
+      </div>
+
       <section class="contents section-observe" aria-labelledby="contents-title">
         <div class="container contents__layout">
           <div class="contents__heading">
