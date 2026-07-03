@@ -47,10 +47,10 @@
         </button>
 
         <div class="nav-menu" data-nav-menu>
+          <a href="#products">DB 구매하기</a>
           <a href="#partner">파트너 소개</a>
           <a href="#contact">DB 문의</a>
           <a href="#benefits">이벤트·혜택</a>
-          <a href="#products">이루다몰</a>
           <a href="#support">고객지원</a>
           <a href="#login">로그인</a>
           <a class="button button--primary button--small" href="#signup">회원가입</a>
@@ -74,9 +74,50 @@
             </div>
           </div>
 
-          <figure class="hero__visual" aria-label="보험 설계사와 고객 리드 매칭 일러스트">
-            <img src="assets/optimized/hero-eruda.jpg" alt="" />
-          </figure>
+          <div class="hero__visual hero-demo" role="img" aria-label="이루다 전산의 통화 녹취, AI 통화 요약, AI DB 추천 화면 미리보기">
+            <div class="hero-demo__window" aria-hidden="true">
+              <div class="hero-demo__titlebar">
+                <span class="hero-demo__dots"><i></i><i></i><i></i></span>
+                <span class="hero-demo__title">이루다 전산 · 상담 관리</span>
+                <span class="hero-demo__live">LIVE</span>
+              </div>
+
+              <div class="hero-demo__call">
+                <div class="hero-demo__caller">
+                  <span class="hero-demo__avatar">김</span>
+                  <div class="hero-demo__caller-info">
+                    <strong>김○희 고객</strong>
+                    <span>보장 분석 신청 · 010-****-3821</span>
+                  </div>
+                  <span class="hero-demo__rec"><i></i>REC 04:37</span>
+                </div>
+                <div class="hero-demo__wave">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <p class="hero-demo__call-note">통화 녹취 중 · 상담 이력 자동 보관</p>
+              </div>
+
+              <div class="hero-demo__panel">
+                <div class="hero-demo__panel-head">
+                  <span class="hero-demo__chip">AI 통화 요약</span>
+                  <span class="hero-demo__meta">통화 종료 후 자동 생성</span>
+                </div>
+                <div class="summary-card">
+                  <div class="summary-card__meta">
+                    <span class="summary-card__needs">보장 분석</span>
+                    <span class="summary-card__who">김○희 고객 · 통화 4분 37초</span>
+                    <span class="summary-card__qa">검수 합격</span>
+                  </div>
+                  <p>실손보험 유지 중, 암 진단비 보장 공백 확인. 증권 기준 리모델링 제안에 긍정적 — 목요일 오후 재통화 희망.</p>
+                </div>
+              </div>
+
+              <div class="hero-demo__reco">
+                <span class="hero-demo__chip hero-demo__chip--reco">AI DB 추천</span>
+                <p>계약까지 이어진 상담 데이터를 학습해 <strong>보장 분석 리모델링 (일반)</strong> DB를 추천했어요</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="container hero__features" aria-label="이루다 전산 신규 기능">
@@ -323,7 +364,7 @@
       <section class="products section-observe" id="products" aria-labelledby="product-title">
         <div class="container">
           <div class="section-heading section-heading--center">
-            <p class="eyebrow">이루다몰</p>
+            <p class="eyebrow">DB 구매하기</p>
             <h2 id="product-title">설계사님 맞춤형 DB, 한 번에!</h2>
             <p>설계사님에게 딱 맞는 상품만 쏙쏙 골라드립니다.</p>
           </div>
@@ -347,7 +388,7 @@
               </ul>
               <img class="product-visual" src="assets/optimized/product-saving-premium.jpg" alt="" loading="lazy" />
               <p class="product-price">90,000원</p>
-              <button class="button button--primary button--small product-buy" type="button" data-product-id="analysis-general" data-product-name="보장 분석 리모델링 (일반)">구매하기</button>
+              <a class="button button--primary button--small product-buy" href="product.html?id=analysis-general">구매하기</a>
             </article>
             <article class="product-card" data-category="analysis silver">
               <span class="badge badge--warm">실버</span>
@@ -359,7 +400,7 @@
               </ul>
               <img class="product-visual" src="assets/optimized/product-silver-premium.jpg" alt="" loading="lazy" />
               <p class="product-price">80,000원</p>
-              <button class="button button--primary button--small product-buy" type="button" data-product-id="analysis-silver" data-product-name="보장 분석 리모델링 (실버)">구매하기</button>
+              <a class="button button--primary button--small product-buy" href="product.html?id=analysis-silver">구매하기</a>
             </article>
             <article class="product-card" data-category="replan silver">
               <span class="badge badge--warm">실버</span>
@@ -371,7 +412,7 @@
               </ul>
               <img class="product-visual" src="assets/optimized/product-silver-max.jpg" alt="" loading="lazy" />
               <p class="product-price">70,000원</p>
-              <button class="button button--primary button--small product-buy" type="button" data-product-id="replan-silver" data-product-name="보험료 플랜 재설계 (실버)">구매하기</button>
+              <a class="button button--primary button--small product-buy" href="product.html?id=replan-silver">구매하기</a>
             </article>
             <article class="product-card" data-category="replan general">
               <span class="badge">일반</span>
@@ -383,51 +424,11 @@
               </ul>
               <img class="product-visual" src="assets/optimized/product-saving-max.jpg" alt="" loading="lazy" />
               <p class="product-price">80,000원</p>
-              <button class="button button--primary button--small product-buy" type="button" data-product-id="replan-general" data-product-name="보험료 플랜 재설계 (일반)">구매하기</button>
+              <a class="button button--primary button--small product-buy" href="product.html?id=replan-general">구매하기</a>
             </article>
           </div>
         </div>
       </section>
-
-      <div class="payment-modal" data-payment-modal hidden>
-        <div class="payment-modal__backdrop" data-payment-modal-close></div>
-        <div class="payment-modal__panel" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title">
-          <button class="icon-button payment-modal__close" type="button" aria-label="닫기" data-payment-modal-close>
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
-          </button>
-
-          <div class="payment-modal__step" data-payment-step="info">
-            <span class="badge" data-info-badge></span>
-            <h3 id="payment-modal-title" data-info-title></h3>
-            <p class="payment-modal__price" data-info-price></p>
-            <p class="payment-modal__desc" data-info-desc></p>
-
-            <h4 class="payment-modal__label">제공 정보</h4>
-            <ul class="info-chips" data-info-fields></ul>
-
-            <h4 class="payment-modal__label">샘플 스크립트</h4>
-            <div class="script-box" data-info-script></div>
-
-            <h4 class="payment-modal__label">A/S 기준</h4>
-            <p class="payment-modal__as" data-info-as></p>
-
-            <button class="button button--primary payment-modal__next" type="button" data-payment-next>구매 진행하기</button>
-          </div>
-
-          <div class="payment-modal__step" data-payment-step="form" hidden>
-            <h3>구매자 정보 입력</h3>
-            <p class="payment-modal__product" data-payment-modal-product></p>
-            <form data-payment-form>
-              <label>이름<input type="text" name="customerName" required /></label>
-              <label>이메일<input type="email" name="customerEmail" required /></label>
-              <label>휴대폰번호<input type="tel" name="customerMobilePhone" placeholder="01012345678" required /></label>
-              <p class="payment-modal__error" data-payment-error hidden></p>
-              <button class="button button--primary" type="submit" data-payment-submit>결제 진행</button>
-            </form>
-            <button class="payment-modal__back" type="button" data-payment-back>← DB 정보 다시 보기</button>
-          </div>
-        </div>
-      </div>
 
       <div class="payment-modal" data-success-modal hidden>
         <div class="payment-modal__backdrop" data-success-close></div>
@@ -559,9 +560,9 @@
 
         <div class="footer__info">
           <div class="footer__links">
-            <a href="#terms">이용약관</a>
-            <a href="#privacy">개인정보처리방침</a>
-            <a href="#support">고객지원</a>
+            <a href="terms.html">이용약관</a>
+            <a href="privacy.html">개인정보처리방침</a>
+            <a href="support.html">고객지원</a>
           </div>
           <p>
             상호: [회사명] · 대표: [대표자명] · 주소: [회사주소] · 사업자등록번호: [사업자등록번호]
